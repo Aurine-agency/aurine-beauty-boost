@@ -130,11 +130,14 @@ const ReportGenerator = () => {
 
     setIsGenerating(true);
     try {
+      const rect = element.getBoundingClientRect();
       const canvas = await html2canvas(element, {
         scale: 2,
         backgroundColor: "#050509",
-        width: 1920,
-        height: 1080,
+        width: rect.width,
+        height: rect.height,
+        windowWidth: rect.width,
+        windowHeight: rect.height,
       });
 
       const link = document.createElement("a");
