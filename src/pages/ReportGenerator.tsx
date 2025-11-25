@@ -106,6 +106,7 @@ const ReportGenerator = () => {
         windowWidth: 794,
         useCORS: true,
         allowTaint: true,
+        foreignObjectRendering: true,
       });
 
       // Przywrócenie oryginalnych stylów
@@ -175,6 +176,7 @@ const ReportGenerator = () => {
         windowHeight: rect.height,
         useCORS: true,
         allowTaint: true,
+        foreignObjectRendering: true,
       });
 
       const link = document.createElement("a");
@@ -250,6 +252,11 @@ const ReportGenerator = () => {
               <div className="w-full max-w-[1920px]">
                 <ReportPreviewLandscape data={reportData} />
               </div>
+            </div>
+
+            {/* Ukryty pionowy podgląd tylko do generowania PDF */}
+            <div className="fixed -left-[3000px] top-0">
+              <ReportPreview data={reportData} />
             </div>
           </div>
         ) : (
