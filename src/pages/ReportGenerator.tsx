@@ -100,13 +100,12 @@ const ReportGenerator = () => {
       element.style.maxWidth = "none";
 
       const canvas = await html2canvas(element, {
-        scale: 2, // Zmniejszono z 3 na 2 dla mniejszego rozmiaru
+        scale: 1.5, // Niższa skala = lżejszy PDF
         backgroundColor: "#050509",
         width: 794, // szerokość A4 w px przy 96 DPI
         windowWidth: 794,
         useCORS: true,
         allowTaint: true,
-        foreignObjectRendering: true,
       });
 
       // Przywrócenie oryginalnych stylów
@@ -114,11 +113,12 @@ const ReportGenerator = () => {
       element.style.aspectRatio = originalAspect;
       element.style.maxWidth = originalMaxWidth;
 
-      const imgData = canvas.toDataURL("image/png");
+      const imgData = canvas.toDataURL("image/jpeg", 0.8);
       const pdf = new jsPDF({
         orientation: "portrait",
         unit: "mm",
         format: "a4",
+        compress: true,
       });
 
       const pageWidth = pdf.internal.pageSize.getWidth();
@@ -133,13 +133,13 @@ const ReportGenerator = () => {
       let heightLeft = pdfHeight;
       let position = 0;
 
-      pdf.addImage(imgData, "PNG", 0, position, pageWidth, pdfHeight);
+      pdf.addImage(imgData, "JPEG", 0, position, pageWidth, pdfHeight, undefined, "FAST");
       heightLeft -= pageHeight;
 
       while (heightLeft > 0) {
         position = heightLeft - pdfHeight;
         pdf.addPage();
-        pdf.addImage(imgData, "PNG", 0, position, pageWidth, pdfHeight);
+        pdf.addImage(imgData, "JPEG", 0, position, pageWidth, pdfHeight, undefined, "FAST");
         heightLeft -= pageHeight;
       }
 
@@ -170,13 +170,12 @@ const ReportGenerator = () => {
       const canvas = await html2canvas(element, {
         scale: 2,
         backgroundColor: "#000000",
+        useCORS: true,
+        allowTaint: true,
         width: rect.width,
         height: rect.height,
         windowWidth: rect.width,
         windowHeight: rect.height,
-        useCORS: true,
-        allowTaint: true,
-        foreignObjectRendering: true,
       });
 
       const link = document.createElement("a");
