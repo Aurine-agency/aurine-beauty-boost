@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
+import { Link } from "react-router-dom";
 import aurinelogo from "@/assets/aurine-logo.png";
 
 const Navigation = () => {
@@ -25,6 +26,10 @@ const Navigation = () => {
     { label: "Dlaczego my", id: "benefits" },
     { label: "FAQ", id: "faq" },
     { label: "Kontakt", id: "contact" },
+  ];
+
+  const externalLinks = [
+    { label: "Generator Raportów", path: "/report-generator" },
   ];
 
   return (
@@ -62,6 +67,16 @@ const Navigation = () => {
                 <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full" />
               </button>
             ))}
+            {externalLinks.map((link) => (
+              <Link
+                key={link.path}
+                to={link.path}
+                className="text-foreground/80 hover:text-primary font-medium transition-colors relative group"
+              >
+                {link.label}
+                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full" />
+              </Link>
+            ))}
             <Button
               onClick={() => scrollToSection("contact")}
               className="bg-primary hover:bg-primary/90 text-primary-foreground"
@@ -91,6 +106,16 @@ const Navigation = () => {
                 >
                   {item.label}
                 </button>
+              ))}
+              {externalLinks.map((link) => (
+                <Link
+                  key={link.path}
+                  to={link.path}
+                  className="text-foreground/80 hover:text-primary font-medium transition-colors text-left py-2"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  {link.label}
+                </Link>
               ))}
               <Button
                 onClick={() => scrollToSection("contact")}
