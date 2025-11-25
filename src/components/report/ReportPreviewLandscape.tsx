@@ -63,12 +63,7 @@ export const ReportPreviewLandscape = ({ data }: ReportPreviewLandscapeProps) =>
   return (
     <div
       id="report-preview-landscape"
-      className="w-full h-full bg-[hsl(var(--brand-darker))] text-white rounded-3xl shadow-2xl overflow-hidden"
-      style={{
-        aspectRatio: "16/9",
-        width: "100%",
-        margin: "0 auto",
-      }}
+      className="w-[1600px] h-[900px] bg-[hsl(var(--brand-darker))] text-white rounded-3xl shadow-2xl overflow-hidden"
     >
       <div className="flex h-full">
         {/* Sidebar */}
@@ -137,7 +132,7 @@ export const ReportPreviewLandscape = ({ data }: ReportPreviewLandscapeProps) =>
         </aside>
 
         {/* Main analytics area */}
-        <main className="flex-1 bg-gradient-to-b from-slate-900/80 to-slate-950/90 p-6 space-y-6">
+        <main className="flex-1 h-full bg-gradient-to-b from-slate-900/80 to-slate-950/90 p-6 flex flex-col gap-4">
           {/* Top header */}
           <header className="flex items-center justify-between gap-6">
             <div>
@@ -221,167 +216,170 @@ export const ReportPreviewLandscape = ({ data }: ReportPreviewLandscapeProps) =>
             </div>
           </section>
 
-          {/* Charts row 1 */}
-          <section className="grid grid-cols-2 gap-4">
-            {/* Conversion pie */}
-            <div className="bg-slate-900/80 rounded-2xl border border-slate-800 p-4 flex flex-col">
-              <div className="flex items-center justify-between mb-3">
-                <div className="flex items-center gap-2">
-                  <div className="bg-pink-500 w-7 h-7 rounded-lg flex items-center justify-center">
-                    <CheckCircle2 className="w-4 h-4 text-white" />
-                  </div>
-                  <div>
-                    <h4 className="text-sm font-semibold">Efektywność rezerwacji</h4>
-                    <p className="text-[11px] text-slate-400">
-                      Udział rezerwacji w całkowitej liczbie konwersji
-                    </p>
+          {/* Charts & trends area */}
+          <div className="grid grid-cols-2 gap-4 flex-1 min-h-0">
+            {/* Left column: pies */}
+            <div className="flex flex-col gap-4 min-h-0">
+              {/* Conversion pie */}
+              <div className="bg-slate-900/80 rounded-2xl border border-slate-800 p-4 flex flex-col flex-1 min-h-0">
+                <div className="flex items-center justify-between mb-3">
+                  <div className="flex items-center gap-2">
+                    <div className="bg-pink-500 w-7 h-7 rounded-lg flex items-center justify-center">
+                      <CheckCircle2 className="w-4 h-4 text-white" />
+                    </div>
+                    <div>
+                      <h4 className="text-sm font-semibold">Efektywność rezerwacji</h4>
+                      <p className="text-[11px] text-slate-400">
+                        Udział rezerwacji w całkowitej liczbie konwersji
+                      </p>
+                    </div>
                   </div>
                 </div>
+                <div className="flex-1 min-h-0">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <PieChart>
+                      <Pie
+                        data={conversionData}
+                        cx="50%"
+                        cy="50%"
+                        innerRadius={50}
+                        outerRadius={75}
+                        paddingAngle={4}
+                        dataKey="value"
+                      >
+                        <Cell fill="#ec4899" />
+                        <Cell fill="#334155" />
+                      </Pie>
+                      <Tooltip />
+                    </PieChart>
+                  </ResponsiveContainer>
+                </div>
+                <p className="text-center text-slate-300 text-xs mt-2">
+                  {data.bookings || "—"} z {data.conversions || "—"} wszystkich konwersji
+                </p>
               </div>
-              <div className="flex-1 h-40">
-                <ResponsiveContainer width="100%" height="100%">
-                  <PieChart>
-                    <Pie
-                      data={conversionData}
-                      cx="50%"
-                      cy="50%"
-                      innerRadius={50}
-                      outerRadius={75}
-                      paddingAngle={4}
-                      dataKey="value"
-                    >
-                      <Cell fill="#ec4899" />
-                      <Cell fill="#334155" />
-                    </Pie>
-                    <Tooltip />
-                  </PieChart>
-                </ResponsiveContainer>
-              </div>
-              <p className="text-center text-slate-300 text-xs mt-2">
-                {data.bookings || "—"} z {data.conversions || "—"} wszystkich konwersji
-              </p>
-            </div>
 
-            {/* Engagement pie */}
-            <div className="bg-slate-900/80 rounded-2xl border border-slate-800 p-4 flex flex-col">
-              <div className="flex items-center justify-between mb-3">
-                <div className="flex items-center gap-2">
-                  <div className="bg-blue-500 w-7 h-7 rounded-lg flex items-center justify-center">
-                    <Target className="w-4 h-4 text-white" />
-                  </div>
-                  <div>
-                    <h4 className="text-sm font-semibold">Zaangażowanie odbiorców</h4>
-                    <p className="text-[11px] text-slate-400">
-                      Stosunek osób aktywnych do wszystkich objętych zasięgiem
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <div className="flex-1 h-40">
-                <ResponsiveContainer width="100%" height="100%">
-                  <PieChart>
-                    <Pie
-                      data={engagementData}
-                      cx="50%"
-                      cy="50%"
-                      innerRadius={50}
-                      outerRadius={75}
-                      paddingAngle={4}
-                      dataKey="value"
-                    >
-                      <Cell fill="#3b82f6" />
-                      <Cell fill="#334155" />
-                    </Pie>
-                    <Tooltip />
-                  </PieChart>
-                </ResponsiveContainer>
-              </div>
-            </div>
-          </section>
-
-          {/* Charts row 2 */}
-          <section className="grid grid-cols-[1.4fr,1fr] gap-4">
-            {/* Weekly trend line */}
-            <div className="bg-slate-900/80 rounded-2xl border border-slate-800 p-4 flex flex-col">
-              <div className="flex items-center justify-between mb-3">
-                <div className="flex items-center gap-2">
-                  <div className="bg-purple-500 w-7 h-7 rounded-lg flex items-center justify-center">
-                    <TrendingUp className="w-4 h-4 text-white" />
-                  </div>
-                  <div>
-                    <h4 className="text-sm font-semibold">Tygodniowy trend kampanii</h4>
-                    <p className="text-[11px] text-slate-400">
-                      Zmiana zasięgu i liczby kliknięć w kolejnych tygodniach
-                    </p>
+              {/* Engagement pie */}
+              <div className="bg-slate-900/80 rounded-2xl border border-slate-800 p-4 flex flex-col flex-1 min-h-0">
+                <div className="flex items-center justify-between mb-3">
+                  <div className="flex items-center gap-2">
+                    <div className="bg-blue-500 w-7 h-7 rounded-lg flex items-center justify-center">
+                      <Target className="w-4 h-4 text-white" />
+                    </div>
+                    <div>
+                      <h4 className="text-sm font-semibold">Zaangażowanie odbiorców</h4>
+                      <p className="text-[11px] text-slate-400">
+                        Stosunek osób aktywnych do wszystkich objętych zasięgiem
+                      </p>
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div className="flex-1 h-44">
-                <ResponsiveContainer width="100%" height="100%">
-                  <LineChart data={weeklyData}>
-                    <XAxis dataKey="week" stroke="#94a3b8" style={{ fontSize: "11px" }} />
-                    <YAxis stroke="#94a3b8" style={{ fontSize: "11px" }} />
-                    <Tooltip
-                      contentStyle={{
-                        backgroundColor: "#0f172a",
-                        border: "none",
-                        borderRadius: "8px",
-                        fontSize: "12px",
-                      }}
-                    />
-                    <Line
-                      type="monotone"
-                      dataKey="reach"
-                      stroke="#ec4899"
-                      strokeWidth={3}
-                      dot={{ fill: "#ec4899", r: 3 }}
-                    />
-                    <Line
-                      type="monotone"
-                      dataKey="clicks"
-                      stroke="#3b82f6"
-                      strokeWidth={3}
-                      dot={{ fill: "#3b82f6", r: 3 }}
-                    />
-                  </LineChart>
-                </ResponsiveContainer>
+                <div className="flex-1 min-h-0">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <PieChart>
+                      <Pie
+                        data={engagementData}
+                        cx="50%"
+                        cy="50%"
+                        innerRadius={50}
+                        outerRadius={75}
+                        paddingAngle={4}
+                        dataKey="value"
+                      >
+                        <Cell fill="#3b82f6" />
+                        <Cell fill="#334155" />
+                      </Pie>
+                      <Tooltip />
+                    </PieChart>
+                  </ResponsiveContainer>
+                </div>
               </div>
             </div>
 
-            {/* Daily bookings bar */}
-            <div className="bg-slate-900/80 rounded-2xl border border-slate-800 p-4 flex flex-col">
-              <div className="flex items-center justify-between mb-3">
-                <div className="flex items-center gap-2">
-                  <div className="bg-pink-500 w-7 h-7 rounded-lg flex items-center justify-center">
-                    <CheckCircle2 className="w-4 h-4 text-white" />
-                  </div>
-                  <div>
-                    <h4 className="text-sm font-semibold">Rezerwacje wg dni tygodnia</h4>
-                    <p className="text-[11px] text-slate-400">
-                      Rozkład liczby wizyt pozyskanych z kampanii
-                    </p>
+            {/* Right column: trends */}
+            <div className="flex flex-col gap-4 min-h-0">
+              {/* Weekly trend line */}
+              <div className="bg-slate-900/80 rounded-2xl border border-slate-800 p-4 flex flex-col flex-1 min-h-0">
+                <div className="flex items-center justify-between mb-3">
+                  <div className="flex items-center gap-2">
+                    <div className="bg-purple-500 w-7 h-7 rounded-lg flex items-center justify-center">
+                      <TrendingUp className="w-4 h-4 text-white" />
+                    </div>
+                    <div>
+                      <h4 className="text-sm font-semibold">Tygodniowy trend kampanii</h4>
+                      <p className="text-[11px] text-slate-400">
+                        Zmiana zasięgu i liczby kliknięć w kolejnych tygodniach
+                      </p>
+                    </div>
                   </div>
                 </div>
+                <div className="flex-1 min-h-0">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <LineChart data={weeklyData}>
+                      <XAxis dataKey="week" stroke="#94a3b8" style={{ fontSize: "11px" }} />
+                      <YAxis stroke="#94a3b8" style={{ fontSize: "11px" }} />
+                      <Tooltip
+                        contentStyle={{
+                          backgroundColor: "#0f172a",
+                          border: "none",
+                          borderRadius: "8px",
+                          fontSize: "12px",
+                        }}
+                      />
+                      <Line
+                        type="monotone"
+                        dataKey="reach"
+                        stroke="#ec4899"
+                        strokeWidth={3}
+                        dot={{ fill: "#ec4899", r: 3 }}
+                      />
+                      <Line
+                        type="monotone"
+                        dataKey="clicks"
+                        stroke="#3b82f6"
+                        strokeWidth={3}
+                        dot={{ fill: "#3b82f6", r: 3 }}
+                      />
+                    </LineChart>
+                  </ResponsiveContainer>
+                </div>
               </div>
-              <div className="flex-1 h-44">
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={dailyBookings}>
-                    <XAxis dataKey="day" stroke="#94a3b8" style={{ fontSize: "11px" }} />
-                    <YAxis stroke="#94a3b8" style={{ fontSize: "11px" }} />
-                    <Tooltip
-                      contentStyle={{
-                        backgroundColor: "#0f172a",
-                        border: "none",
-                        borderRadius: "8px",
-                        fontSize: "12px",
-                      }}
-                    />
-                    <Bar dataKey="value" fill="#ec4899" radius={[8, 8, 0, 0]} />
-                  </BarChart>
-                </ResponsiveContainer>
+
+              {/* Daily bookings bar */}
+              <div className="bg-slate-900/80 rounded-2xl border border-slate-800 p-4 flex flex-col flex-1 min-h-0">
+                <div className="flex items-center justify-between mb-3">
+                  <div className="flex items-center gap-2">
+                    <div className="bg-pink-500 w-7 h-7 rounded-lg flex items-center justify-center">
+                      <CheckCircle2 className="w-4 h-4 text-white" />
+                    </div>
+                    <div>
+                      <h4 className="text-sm font-semibold">Rezerwacje wg dni tygodnia</h4>
+                      <p className="text-[11px] text-slate-400">
+                        Rozkład liczby wizyt pozyskanych z kampanii
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div className="flex-1 min-h-0">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart data={dailyBookings}>
+                      <XAxis dataKey="day" stroke="#94a3b8" style={{ fontSize: "11px" }} />
+                      <YAxis stroke="#94a3b8" style={{ fontSize: "11px" }} />
+                      <Tooltip
+                        contentStyle={{
+                          backgroundColor: "#0f172a",
+                          border: "none",
+                          borderRadius: "8px",
+                          fontSize: "12px",
+                        }}
+                      />
+                      <Bar dataKey="value" fill="#ec4899" radius={[8, 8, 0, 0]} />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </div>
               </div>
             </div>
-          </section>
+          </div>
 
           <footer className="pt-2 border-t border-slate-800 flex items-center justify-between text-[11px] text-slate-500">
             <p>Raport wygenerowany automatycznie przez Aurine Agency</p>
