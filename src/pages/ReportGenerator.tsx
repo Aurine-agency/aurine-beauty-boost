@@ -31,6 +31,7 @@ const ReportGenerator = () => {
   const { toast } = useToast();
   const [reportData, setReportData] = useState<ReportFormData | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
+  const [isLandscape, setIsLandscape] = useState(false);
 
   const {
     register,
@@ -107,6 +108,37 @@ const ReportGenerator = () => {
       toast({
         title: "Błąd",
         description: "Nie udało się wygenerować PDF",
+        variant: "destructive",
+      });
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+
+  const downloadAsImage = async () => {
+    const element = document.getElementById("report-preview");
+    if (!element) return;
+
+    setIsGenerating(true);
+    try {
+      const canvas = await html2canvas(element, {
+        scale: 2,
+        backgroundColor: "#050509",
+      });
+
+      const link = document.createElement("a");
+      link.download = `raport-${Date.now()}.png`;
+      link.href = canvas.toDataURL("image/png");
+      link.click();
+
+      toast({
+        title: "Obraz pobrany!",
+        description: "Raport został zapisany jako PNG",
+      });
+    } catch (error) {
+      toast({
+        title: "Błąd",
+        description: "Nie udało się pobrać obrazu",
         variant: "destructive",
       });
     } finally {
@@ -332,18 +364,35 @@ const ReportGenerator = () => {
 
           {reportData && (
             <div className="space-y-4">
-              <div className="flex justify-between items-center">
+              <div className="flex justify-between items-center flex-wrap gap-4">
                 <h2 className="text-2xl font-bold text-white">Podgląd</h2>
-                <Button
-                  onClick={generatePDF}
-                  disabled={isGenerating}
-                  className="bg-pink-600 hover:bg-pink-700"
-                >
-                  {isGenerating ? "Generowanie..." : "Pobierz PDF"}
-                </Button>
+                <div className="flex gap-3 items-center flex-wrap">
+                  <Button
+                    onClick={() => setIsLandscape(!isLandscape)}
+                    variant="outline"
+                    className="border-slate-700 text-white hover:bg-slate-800"
+                  >
+                    {isLandscape ? "Widok pionowy" : "Widok poziomy"}
+                  </Button>
+                  <Button
+                    onClick={downloadAsImage}
+                    disabled={isGenerating}
+                    variant="outline"
+                    className="border-pink-600 text-pink-400 hover:bg-pink-950"
+                  >
+                    {isGenerating ? "Pobieranie..." : "Pobierz PNG"}
+                  </Button>
+                  <Button
+                    onClick={generatePDF}
+                    disabled={isGenerating}
+                    className="bg-pink-600 hover:bg-pink-700"
+                  >
+                    {isGenerating ? "Generowanie..." : "Pobierz PDF"}
+                  </Button>
+                </div>
               </div>
-              <div className="border-2 border-slate-700 rounded-lg overflow-hidden">
-                <ReportPreview data={reportData} />
+              <div className={`border-2 border-slate-700 rounded-lg overflow-auto ${isLandscape ? 'max-h-[80vh]' : ''}`}>
+                <ReportPreview data={reportData} isLandscape={isLandscape} />
               </div>
             </div>
           )}
