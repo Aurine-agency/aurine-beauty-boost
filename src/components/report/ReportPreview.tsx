@@ -30,9 +30,10 @@ interface ReportData {
 
 interface ReportPreviewProps {
   data: ReportData;
+  isLandscape?: boolean;
 }
 
-export const ReportPreview = ({ data }: ReportPreviewProps) => {
+export const ReportPreview = ({ data, isLandscape = false }: ReportPreviewProps) => {
   const conversionData = [
     { name: "Rezerwacje", value: 72 },
     { name: "Pozostałe", value: 28 },
@@ -67,7 +68,10 @@ export const ReportPreview = ({ data }: ReportPreviewProps) => {
   return (
     <div
       id="report-preview"
-      className="bg-[hsl(var(--brand-darker))] p-12 min-h-[1400px] w-full"
+      className={`bg-[hsl(var(--brand-darker))] p-12 w-full ${
+        isLandscape ? 'min-h-0' : 'min-h-[1400px]'
+      }`}
+      style={isLandscape ? { aspectRatio: '16/9', maxWidth: '1920px' } : undefined}
     >
       {/* Header with Logo */}
       <div className="flex justify-between items-center mb-12 pb-8 border-b-2 border-slate-800">
